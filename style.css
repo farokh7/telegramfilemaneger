@@ -1,0 +1,54 @@
+body {
+  font-family: Tahoma, sans-serif;
+  direction: rtl;
+  background: #f4f4f4;
+  padding: 20px;
+}
+#app {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+#controls {
+  margin-bottom: 20px;
+}
+button {
+  padding: 8px 16px;
+  margin-left: 10px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#content div {
+  margin: 10px 0;
+  cursor: pointer;
+}
+#breadcrumb {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+#modal {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hidden { display: none; }
+#modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
