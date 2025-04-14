@@ -133,6 +133,12 @@ $random_bg = $bg_images[array_rand($bg_images)];
     .register-container button:hover {
       background: #218838;
     }
+    .register-container button.delete {
+      background: #dc3545; /* Red background for delete button */
+    }
+    .register-container button.delete:hover {
+      background: #c82333; /* Darker red on hover */
+    }
     .register-container a {
       color: #007bff;
       text-decoration: none;

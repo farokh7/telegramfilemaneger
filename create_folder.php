@@ -18,6 +18,6 @@ if ($name) {
 }
 
 // Redirect back to the index page with the correct language and folder
-header('Location: index.php' . ($parent_id ? '?folder=' . $parent_id : '') . '&lang=' . $lang);
+header('Location: index.php' . ($parent_id ? '?folder=' . $parent_id . '&lang=' . $lang : '?lang=' . $lang)); // Corrected URL structure
 exit;
 ?>

@@ -194,6 +194,13 @@ $breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
     .folder:hover .actions {
       display: flex; /* Show on hover */
     }
+    .folder .actions button.delete {
+      background: #dc3545; /* Red background for delete button */
+      color: white;
+    }
+    .folder .actions button.delete:hover {
+      background: #c82333; /* Darker red on hover */
+    }
     .breadcrumb {
       font-size: 18px;
       font-weight: bold;
@@ -291,8 +298,11 @@ $breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
 
     <div class="actions">
       <button id="toggleNewFolderForm"><?= $t['new_folder'] ?></button>
-      <label for="uploadFile" style="cursor: pointer; padding: 10px 15px; background: #007bff; color: white; border-radius: 5px; text-align: center; transition: background 0.3s ease;"><?= $t['upload_file'] ?></label>
-      <input type="file" id="uploadFile" name="file" style="display: none;">
+      <form action="upload_file.php?lang=<?= $lang ?>" method="POST" enctype="multipart/form-data" style="display: inline;">
+        <input type="hidden" name="folder_id" value="<?= $current_folder_id ?>">
+        <label for="uploadFile" style="cursor: pointer; padding: 10px 15px; background: #007bff; color: white; border-radius: 5px; text-align: center; transition: background 0.3s ease;"><?= $t['upload_file'] ?></label>
+        <input type="file" id="uploadFile" name="file" style="display: none;" onchange="this.form.submit()">
+      </form>
       <a href="logout.php" style="margin-left: auto; padding: 10px 15px; background: #dc3545; color: white; text-decoration: none; border-radius: 5px; transition: background 0.3s ease;"><?= $t['logout'] ?></a>
     </div>
 
