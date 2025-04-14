@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -10,10 +16,12 @@ function logError($message) {
     file_put_contents('log.txt', date('Y-m-d H:i:s') . " - " . $message . "\n", FILE_APPEND);
 }
 
+$user_id = $_SESSION['user_id'];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $file = $_FILES['file'];
     $name = $_POST['name'] ?? $file['name'];
-    $folder_id = $_POST['folder_id'] ?? null;
+    $folder_id = isset($_POST['folder_id']) ? intval($_POST['folder_id']) : null;
 
     $tempPath = $file['tmp_name'];
     $filePath = realpath($tempPath);
@@ -55,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $res = json_decode($response, true);
     if ($res && isset($res['ok']) && $res['ok'] && isset($res['result']['message_id'])) {
         $file_url = "https://t.me/" . ltrim(CHANNEL_USERNAME, "@") . "/" . $res['result']['message_id'];
-        $stmt = $pdo->prepare("INSERT INTO files (name, telegram_url, folder_id) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $file_url, $folder_id ?: null]);
+        $stmt = $pdo->prepare("INSERT INTO files (name, telegram_url, folder_id, user_id) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$name, $file_url, $folder_id ?: null, $user_id]);
         echo "success";
     } else {
         http_response_code(500);
@@ -67,3 +75,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     http_response_code(400);
     echo "درخواست نامعتبر";
 }
+?>
