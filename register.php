@@ -51,15 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($password !== $confirm_password) {
     $error = $lang === 'fa' ? 'رمز عبور و تایید رمز عبور یکسان نیستند.' : ($lang === 'fr' ? 'Les mots de passe ne correspondent pas.' : ($lang === 'ar' ? 'كلمات المرور غير متطابقة.' : 'Passwords do not match.'));
   } else {
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$username]);
     if ($stmt->fetch()) {
       $error = $lang === 'fa' ? 'این نام کاربری قبلاً ثبت شده است.' : ($lang === 'fr' ? 'Ce nom d\'utilisateur est déjà pris.' : ($lang === 'ar' ? 'اسم المستخدم مأخوذ بالفعل.' : 'This username is already taken.'));
     } else {
       $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-      $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+      $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
       $stmt->execute([$username, $hashed_password]);
-      $_SESSION['user_id'] = $pdo->lastInsertId();
+      $_SESSION['user_id'] = $db->lastInsertId();
       header('Location: index.php?lang=' . $lang); // Preserve language
       exit;
     }

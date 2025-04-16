@@ -88,23 +88,23 @@ $random_bg = $bg_images[array_rand($bg_images)];
 $current_folder_id = isset($_GET['folder']) ? intval($_GET['folder']) : null;
 $current_folder = null;
 if ($current_folder_id) {
-  $stmt = $pdo->prepare("SELECT * FROM folders WHERE id = ? AND user_id = ?");
+  $stmt = $db->prepare("SELECT * FROM folders WHERE id = ? AND user_id = ?");
   $stmt->execute([$current_folder_id, $user_id]);
   $current_folder = $stmt->fetch();
 }
 
-$folders = $pdo->prepare("SELECT * FROM folders WHERE parent_id " . ($current_folder_id ? "= ?" : "IS NULL") . " AND user_id = ?");
+$folders = $db->prepare("SELECT * FROM folders WHERE parent_id " . ($current_folder_id ? "= ?" : "IS NULL") . " AND user_id = ?");
 if ($current_folder_id) $folders->execute([$current_folder_id, $user_id]);
 else $folders->execute([$user_id]);
 
-$files = $pdo->prepare("SELECT * FROM files WHERE folder_id " . ($current_folder_id ? "= ?" : "IS NULL") . " AND user_id = ?");
+$files = $db->prepare("SELECT * FROM files WHERE folder_id " . ($current_folder_id ? "= ?" : "IS NULL") . " AND user_id = ?");
 if ($current_folder_id) $files->execute([$current_folder_id, $user_id]);
 else $files->execute([$user_id]);
 
-function buildBreadcrumb($pdo, $folder_id, $user_id) {
+function buildBreadcrumb($db, $folder_id, $user_id) {
   $trail = [];
   while ($folder_id) {
-    $stmt = $pdo->prepare("SELECT * FROM folders WHERE id = ? AND user_id = ?");
+    $stmt = $db->prepare("SELECT * FROM folders WHERE id = ? AND user_id = ?");
     $stmt->execute([$folder_id, $user_id]);
     $folder = $stmt->fetch();
     if ($folder) {
@@ -117,7 +117,7 @@ function buildBreadcrumb($pdo, $folder_id, $user_id) {
   return $trail;
 }
 
-$breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
+$breadcrumb = buildBreadcrumb($db, $current_folder_id, $user_id);
 ?>
 
 <!DOCTYPE html>
@@ -303,6 +303,17 @@ $breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
         <label for="uploadFile" style="cursor: pointer; padding: 10px 15px; background: #007bff; color: white; border-radius: 5px; text-align: center; transition: background 0.3s ease;"><?= $t['upload_file'] ?></label>
         <input type="file" id="uploadFile" name="file" style="display: none;" onchange="this.form.submit()">
       </form>
+      <?PHP
+      $stmt = $db->prepare("SELECT is_admin FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$is_admin = $stmt->fetchColumn();
+?>
+
+<?php if ($is_admin): ?>
+  <a href="user_admin.php" style="margin-left: 10px; padding: 10px 15px; background: #6c757d; color: white; text-decoration: none; border-radius: 5px;">مدیریت کاربران</a>
+<?php endif; ?>
+
+
       <a href="logout.php" style="margin-left: auto; padding: 10px 15px; background: #dc3545; color: white; text-decoration: none; border-radius: 5px; transition: background 0.3s ease;"><?= $t['logout'] ?></a>
     </div>
 
@@ -334,8 +345,9 @@ $breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
           📎 <?= htmlspecialchars($file['name']) ?>
         </div>
         <div class="actions">
-          <button onclick="alert('<?= $t['edit'] ?>')"><?= $t['edit'] ?></button>
-          <button onclick="alert('<?= $t['delete_file'] ?>')"><?= $t['delete_file'] ?></button>
+        <button onclick="editFile(<?= $file['id'] ?>, '<?= htmlspecialchars($file['name']) ?>')"><?= $t['edit'] ?></button>
+        <button onclick="deleteFile(<?= $file['id'] ?>)"><?= $t['delete_file'] ?></button>
+
         </div>
       </div>
     <?php endforeach; ?>
@@ -381,6 +393,45 @@ $breadcrumb = buildBreadcrumb($pdo, $current_folder_id, $user_id);
   }
 
   document.getElementById('toggleNewFolderForm').addEventListener('click', toggleNewFolderForm);
-  </script>
+ 
+ 
+ 
+ 
+  function deleteFile(id) {
+  if (confirm("آیا مطمئنی می‌خوای این فایل حذف بشه؟")) {
+    fetch('delete_file.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    })
+    .then(res => {
+      if (res.ok) location.reload();
+      else alert("خطا در حذف فایل");
+    })
+    .catch(() => alert("ارتباط با سرور برقرار نشد"));
+  }
+}
+
+
+
+function editFile(id, currentName) {
+  const newName = prompt("نام جدید فایل:", currentName);
+  if (newName && newName !== currentName) {
+    fetch('edit_file.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, name: newName })
+    })
+    .then(res => {
+      if (res.ok) location.reload();
+      else alert("خطا در ویرایش فایل");
+    })
+    .catch(() => alert("مشکل در ارتباط با سرور"));
+  }
+}
+
+ </script>
 </body>
 </html>
+
+
