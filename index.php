@@ -340,17 +340,17 @@ $is_admin = $stmt->fetchColumn();
 
     <h3><?= $t['files'] ?></h3>
     <?php foreach ($files as $file): ?>
-      <div class="file">
-        <div onclick="window.open('<?= htmlspecialchars($file['telegram_url']) ?>', '_blank')">
-          📎 <?= htmlspecialchars($file['name']) ?>
-        </div>
-        <div class="actions">
-        <button onclick="editFile(<?= $file['id'] ?>, '<?= htmlspecialchars($file['name']) ?>')"><?= $t['edit'] ?></button>
-        <button onclick="deleteFile(<?= $file['id'] ?>)"><?= $t['delete_file'] ?></button>
+  <div class="file">
+    <div onclick="window.open('<?= !empty($file['token']) ? 'file.php?token=' . htmlspecialchars($file['token']) : '#' ?>', '_blank')">
+      📎 <?= htmlspecialchars($file['name']) ?>
+    </div>
+    <div class="actions">
+      <button onclick="editFile(<?= $file['id'] ?>, '<?= htmlspecialchars($file['name']) ?>')"><?= $t['edit'] ?></button>
+      <button onclick="deleteFile(<?= $file['id'] ?>)"><?= $t['delete_file'] ?></button>
+    </div>
+  </div>
+<?php endforeach; ?>
 
-        </div>
-      </div>
-    <?php endforeach; ?>
   </div>
 
   <script>

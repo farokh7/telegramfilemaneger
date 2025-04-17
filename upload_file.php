@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require_once 'config.php';
@@ -9,79 +8,56 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$folder_id = $_POST['folder_id'] ?? null;
+$folder_id = isset($_POST['folder_id']) && $_POST['folder_id'] !== '' ? intval($_POST['folder_id']) : null;
 
-if (!isset($_FILES['file'])) {
-    die("No file uploaded.");
+if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+    die("No file uploaded or upload error.");
 }
 
-$upload_dir = __DIR__ . '/uploads/';
-if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
-
+$tmp_file_path = $_FILES['file']['tmp_name'];
 $filename = basename($_FILES['file']['name']);
-$target_path = $upload_dir . $filename;
-$folder_id = isset($_POST['folder_id']) && $_POST['folder_id'] !== '' ? $_POST['folder_id'] : null;
+$file_size = $_FILES['file']['size'];
 
-if (move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
-    $stmt = $db->prepare("INSERT INTO files (name, path, size, user_id, folder_id) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([
-        $filename,
-        'uploads/' . $filename,
-        filesize($target_path),
-        $user_id,
-        $folder_id
-    ]);
+file_put_contents("log.txt", date("Y-m-d H:i:s") . " - START upload of $filename" . PHP_EOL, FILE_APPEND);
 
-    $file_id_db = $db->lastInsertId();
+// حذف فایل خروجی قدیمی
+$result_file = __DIR__ . DIRECTORY_SEPARATOR . 'telegram_result.json';
+if (file_exists($result_file)) unlink($result_file);
 
-    $url = "https://api.telegram.org/bot" . BOT_TOKEN . "/sendDocument";
-    $post_fields = [
-        'chat_id' => CHANNEL_USERNAME,
-        'document' => new CURLFile($target_path)
-    ];
+// اجرای اسکریپت پایتون با مسیر کامل
+$python_path = 'C:\\Users\\Almahdi Laptop\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+$script_path = __DIR__ . DIRECTORY_SEPARATOR . 'send_to_telegram.py';
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type:multipart/form-data"]);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-    curl_setopt($ch, CURLOPT_PROXY, '127.0.0.1:10808');
-    curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+$command = '"' . $python_path . '" "' . $script_path . '" "' . $tmp_file_path . '" 2>&1';
+$output = [];
+exec($command, $output);
+file_put_contents("log.txt", date("Y-m-d H:i:s") . ' - PYTHON OUTPUT: ' . implode(PHP_EOL, $output) . PHP_EOL, FILE_APPEND);
 
-    $output = curl_exec($ch);
-$curl_error = curl_error($ch);
-curl_close($ch);
+// ذخیره اولیه در دیتابیس
+$stmt = $db->prepare("INSERT INTO files (name, path, size, user_id, folder_id) VALUES (?, ?, ?, ?, ?)");
+$stmt->execute([$filename, '', $file_size, $user_id, $folder_id]);
+$file_id_db = $db->lastInsertId();
 
-// لاگ گرفتن
-file_put_contents('log.txt', date("Y-m-d H:i:s") . " CURL OUTPUT: $output\nERROR: $curl_error\n", FILE_APPEND);
+// بررسی خروجی JSON
+if (file_exists($result_file)) {
+    $raw = file_get_contents($result_file);
+    file_put_contents("log.txt", "telegram_result.json: " . $raw . PHP_EOL, FILE_APPEND);
+    $json = json_decode($raw, true);
 
-
-    $response = json_decode($output, true);
-    if (isset($response['result']['document']['file_id'])) {
-        $telegram_file_id = $response['result']['document']['file_id'];
-
-        // دریافت file_path با CURL
-        $getFileUrl = "https://api.telegram.org/bot" . BOT_TOKEN . "/getFile?file_id=" . $telegram_file_id;
-        $ch2 = curl_init($getFileUrl);
-        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch2, CURLOPT_PROXY, '127.0.0.1:10808');
-        curl_setopt($ch2, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
-        $tgResponseJson = curl_exec($ch2);
-        curl_close($ch2);
-        $tgResponse = json_decode($tgResponseJson, true);
-
-        if (isset($tgResponse['result']['file_path'])) {
-            $filePath = $tgResponse['result']['file_path'];
-            $telegram_url = "https://api.telegram.org/file/bot" . BOT_TOKEN . "/" . $filePath;
-
-            $stmt = $db->prepare("UPDATE files SET telegram_file_id = ?, telegram_url = ? WHERE id = ?");
-            $stmt->execute([$telegram_file_id, $telegram_url, $file_id_db]);
-        }
+    if ($json && isset($json['telegram_file_id'], $json['telegram_url'])) {
+        $token = bin2hex(random_bytes(16));
+        $stmt = $db->prepare("UPDATE files SET telegram_file_id = ?, telegram_url = ?, token = ? WHERE id = ?");
+        $stmt->execute([$json['telegram_file_id'], $json['telegram_url'], $token, $file_id_db]);
+    } elseif (isset($json['error'])) {
+        file_put_contents("log.txt", "⛔ Telegram Error: " . $json['error'] . PHP_EOL, FILE_APPEND);
+    } else {
+        file_put_contents("log.txt", "⚠️ JSON parsed but missing expected fields." . PHP_EOL, FILE_APPEND);
     }
-
-    header("Location: index.php" . ($folder_id ? "?folder=" . $folder_id : ""));
-    exit;
 } else {
-    die("File upload failed.");
+    file_put_contents("log.txt", "❌ telegram_result.json not found after Python execution." . PHP_EOL, FILE_APPEND);
 }
+
+// ریدایرکت نهایی
+header("Location: index.php" . ($folder_id ? "?folder=" . $folder_id : ""));
+exit;
 ?>

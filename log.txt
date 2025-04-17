@@ -20,3 +20,123 @@
 TG RESPONSE:
 2025-04-15 19:18:56 CURL OUTPUT: {"ok":false,"error_code":413,"description":"Request Entity Too Large"}
 ERROR: 
+2025-04-16 22:45:31 CURL OUTPUT: 
+ERROR: Failed to connect to 127.0.0.1 port 10808: Connection refused
+2025-04-17 00:18:20 CURL OUTPUT: 
+ERROR: Failed to connect to 127.0.0.1 port 10808: Connection refused
+2025-04-17 13:17:37 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:29:00 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:31:33 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:32:54 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:33:51 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:39:12 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:41:30 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:42:55 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:45:02 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:45:39 - Telegram Error: فایل توسط تلگرام تایید نشد یا message.document خالی بود.
+2025-04-17 13:51:28 - Telegram Error: 'Document' object has no attribute 'file_id'
+2025-04-17 13:51:44 - Telegram Error: 'Document' object has no attribute 'file_id'
+'C:\Users\Almahdi' is not recognized as an internal or external command,
+operable program or batch file.Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 36, in <module>
+    file_id = message.photo.file_id
+              ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Photo' object has no attribute 'file_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 54, in <module>
+    print(f"\u274c ��� �� ����� ��\u06cc�: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 45, in <module>
+    print("����� ���� � �\u06cc� ��\u06cc�� ��.")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 54, in <module>
+    print(f"��� �� ����� ��\u06cc�: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 15: character maps to <undefined>
+⛔ خطا از پایتون: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+2025-04-17 14:10:20 - Telegram Error: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 45, in <module>
+    print("����� ���� � �\u06cc� ��\u06cc�� ��.")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 56, in <module>
+    print(f"��� �� ����� ��\u06cc�: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 15: character maps to <undefined>
+⛔ خطا از پایتون: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+2025-04-17 14:14:56 - Telegram Error: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 45, in <module>
+    print("����� ���� � �\u06cc� ��\u06cc�� ��.")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\telegram-file-manager\send_to_telegram.py", line 56, in <module>
+    print(f"��� �� ����� ��\u06cc�: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Almahdi Laptop\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1256.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u06cc' in position 15: character maps to <undefined>
+⛔ خطا از پایتون: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+2025-04-17 14:18:36 - Telegram Error: 'charmap' codec can't encode character '\u06cc' in position 14: character maps to <undefined>
+File sent and link saved.
+JSON FROM PYTHON: Array
+(
+    [telegram_file_id] => 5767052729976474192
+    [telegram_url] => https://t.me/farokhfilems/44
+)
+2025-04-17 15:06:22 - OUTPUT: Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:06:22 - Telegram Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:06:49 - OUTPUT: Error: The number of file parts is invalid (caused by SendMediaRequest)
+2025-04-17 15:06:49 - Telegram Error: The number of file parts is invalid (caused by SendMediaRequest)
+2025-04-17 15:08:10 - OUTPUT: Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:08:10 - Telegram Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:09:06 - OUTPUT: Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:09:06 - Telegram Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:14:02 - START upload of Monshi.jpg
+2025-04-17 15:14:05 - PYTHON OUTPUT: Error: 'Document' object has no attribute 'file_id'
+telegram_result.json: {"error": "'Document' object has no attribute 'file_id'"}
+⛔ Telegram Error: 'Document' object has no attribute 'file_id'
+2025-04-17 15:19:19 - START upload of logo.jpg
+2025-04-17 15:19:23 - PYTHON OUTPUT: File sent and link saved.
+telegram_result.json: {"telegram_file_id": 5767052729520232891, "telegram_url": "https://t.me/farokhfilems/50"}
+✅ VALID TELEGRAM DATA FOUND
+2025-04-17 15:45:49 - START upload of p.jpg
+2025-04-17 15:45:52 - PYTHON OUTPUT: File sent and link saved.
+telegram_result.json: {"telegram_file_id": 5767052729520232968, "telegram_url": "https://t.me/farokhfilems/51"}
